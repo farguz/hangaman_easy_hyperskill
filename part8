@@ -1,0 +1,55 @@
+import random
+import string
+
+list_to_choose_from = ['python', 'java', 'kotlin', 'javascript']
+guesses_left = 8
+
+right_word = random.choice(list_to_choose_from)
+current_word = '-' * len(right_word)
+guesses = ''
+
+print('H A N G M A N')
+choice = 'play'
+while choice == 'play':
+    
+    #  if play => play, exit => brakes the outer loop, anything else => starts loop (so you hoose again)
+    choice = input('Type "play" to play the game, "exit" to quit: ')
+    if choice == 'exit':
+        break
+    elif choice != 'play':
+        continue
+        
+    while guesses_left > 0:
+        #  simple checks. Letter. Single. Not guessed earlier.
+        while True:
+            print()
+            print(current_word)
+        
+            letter = input('Input a letter: ')
+            if len(letter) != 1:
+                print('You should input a single letter')
+            elif letter not in string.ascii_lowercase:
+                print('Please enter a lowercase English letter')
+            elif letter in guesses:
+                print("You've already guessed this letter")
+            else:
+                break
+        
+        #  if guessed letter in actual word, show that letter, else take the guess away
+        if letter in right_word:
+            if letter not in current_word:
+                for i in range(len(current_word)):
+                    if right_word[i] == letter:
+                        current_word = current_word[:i] + letter + current_word[i+1:]                              
+        else:
+            print("That letter doesn't appear in the word")
+            guesses_left -= 1
+        guesses += letter
+        
+        #  5 strings to detemine are you a winner or a loser
+        if current_word.count('-') == 0:
+            print('You guessed the word!', 'You survived!', sep='\n')
+            break
+    if current_word.count('-') != 0:
+        print('You lost!')
+    
